@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://Serafim:1q2w3e4r@qm0.oj5cl.mongodb.net/devconnector?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://Serafim:1q2w3e4r@qm0.oj5cl.mongodb.net/devconnector?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken"
 }
