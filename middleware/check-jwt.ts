@@ -3,7 +3,7 @@ import { IGetUserAuthInfoRequest } from './auth-definition'
 import jwt from 'jsonwebtoken';
 import config from 'config';
 
-const checkJwt: any = (req: any, res: Response, next: NextFunction) => {
+const checkJwt: any = (req: Request, res: Response, next: NextFunction) => {
 
   // Get token from header
   const token: any = req.header('x-auth-token');

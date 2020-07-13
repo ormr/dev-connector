@@ -3,10 +3,15 @@
     "target": "es5",                          
     "module": "commonjs",                     
     "outFile": "./dist",                       
-    "outDir": "./src",                        
+    "outDir": "./src",
+    "typeRoots": ["./types"],                        
     "strict": true,                          
     "esModuleInterop": true,                  
     "skipLibCheck": true,                     
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+  },
+  "exclude": [
+      "node_modules"
+  ],
+  // "files": ["types.d.ts"]
 }
