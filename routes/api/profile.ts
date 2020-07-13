@@ -115,6 +115,7 @@ router.post('/',
     
     try {
       let profile = await Profile.findOne({ user: req.user.id });
+      console.log(profile);
 
       if (profile) {
         // Update
@@ -200,14 +201,63 @@ router.delete('/', checkJwt, async (req: Request, res: Response) => {
 // @desc Add profile experience
 // @access Private
 
-router.put('/exprerience', [
+router.post('/experience',[
   checkJwt,
     [
-      check('title', 'Title is required').not().isEmpty(),
-      check('company', 'Company is required').not().isEmpty(),
-      check('from', 'From date is required').not().isEmpty()
+      check('title', 'Title is required')
+        .not()
+        .isEmpty(),
+      check('company', 'Company is required')
+        .not()
+        .isEmpty(),
+      check('from', 'From date is required')
+        .not()
+        .isEmpty()
     ]
   ], async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+  const {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description
+  } = req.body;
+
+  interface IExp {
+    title: string,
+    company: string,
+    location: string,
+    from: string,
+    to: string,
+    current: string,
+    description: string
+  }
+
+  const newExp: IExp = {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description
+  }
+  try {
+    let profile = await Profile.findOne({ user: req.user.id });
+    console.log(profile);
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+}/*async (req: any, res: Response) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -246,12 +296,15 @@ router.put('/exprerience', [
 
     try {
       const profile = await Profile.findOne({ user: req.user.id });
-      
+
+      console.log(profile);
+
+      res.json(profile);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-  }
+  }*/
 );
 
 const profile: Router = router;
