@@ -1,6 +1,43 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, model, Schema, Document } from 'mongoose';
 
-const ProfileSchema: Schema = new mongoose.Schema({
+interface IProfile extends Document {
+  user: string;
+  company?: string;
+  website?: string;
+  location?: string;
+  status?: string;
+  skills: string[];
+  bio?: string;
+  githubusername?: string;
+  experience: {
+    title: string;
+    company: string;
+    location?: string;
+    from: string;
+    to?: string;
+    current: string;
+    description: string;
+  }[];
+  education: {
+    school: string;
+    degree: string;
+    fieldofstudy: string;
+    from: Date;
+    to?: Date;
+    current?: boolean;
+    description: string;
+  }[];
+  social: {
+    youtube?: string;
+    twitter?: string;
+    facebook?: string;
+    linkedin?: string;
+    instagram?: string;
+  };
+  date: Date;
+}
+
+const ProfileSchema: Schema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'
@@ -109,7 +146,7 @@ const ProfileSchema: Schema = new mongoose.Schema({
   }
 });
 
-const Profile: Model<mongoose.Document> = mongoose.model('profile', ProfileSchema);
+const Profile: Model<IProfile> = model<IProfile>('profile', ProfileSchema);
 
 export {
   Profile

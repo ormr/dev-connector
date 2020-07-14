@@ -201,7 +201,7 @@ router.delete('/', checkJwt, async (req: Request, res: Response) => {
 // @desc Add profile experience
 // @access Private
 
-router.post('/experience',[
+router.put('/experience',[
   checkJwt,
     [
       check('title', 'Title is required')
@@ -249,63 +249,27 @@ router.post('/experience',[
     current,
     description
   }
+
   try {
-    let profile = await Profile.findOne({ user: req.user.id });
-    console.log(profile);
+    const profile = await Profile.findOne({ user: req.user.id });
+    
+    if (!profile) {
+      return res
+              .status(400)
+              .json({ msg: 'There is no profile for this user' });
+    }
+
+    profile.experience.unshift(newExp);
+
+    await profile.save();
+
     res.json(profile);
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-}/*async (req: any, res: Response) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ error: errors.array() })
-    }
-
-    const {
-      title,
-      company,
-      location,
-      from,
-      to,
-      current,
-      description
-    } = req.body;
-
-    interface IExp {
-      title: string,
-      company: string,
-      location: string,
-      from: string,
-      to: string,
-      current: string,
-      description: string
-    }
-
-    const newExp: IExp = {
-      title,
-      company,
-      location,
-      from,
-      to,
-      current,
-      description
-    }
-
-    try {
-      const profile = await Profile.findOne({ user: req.user.id });
-
-      console.log(profile);
-
-      res.json(profile);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
-  }*/
-);
+});
 
 const profile: Router = router;
 
