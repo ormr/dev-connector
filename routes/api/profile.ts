@@ -367,6 +367,37 @@ router.put('/education', [ checkJwt, [
   }
 );
 
+// @route DELETE api/profile/education/:edu_id
+// @desc Delete profile education
+// @access Private
+
+router.delete('/education/:edu_id',
+  checkJwt,
+  async (req: Request, res: Response) => {
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      if (!profile) {
+        return res.status(400).json({ msg: 'Education is not found'});
+      }
+
+      const removeIndex = profile
+        .experience
+        .map((item: any) => item.id)
+        .indexOf(req.params.edu_id);
+
+      profile.education.splice(removeIndex, 1);
+
+      await profile.save();
+
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).json('Server error');
+    }
+  }
+);
+
 const profile: Router = router;
 
 export { profile };
