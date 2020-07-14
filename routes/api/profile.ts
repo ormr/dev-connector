@@ -3,7 +3,6 @@ import { check, validationResult } from 'express-validator';
 import { checkJwt } from '../../middleware/check-jwt';
 import { Profile } from '../../models/Profile/Profile';
 import { User } from '../../models/User/User';
-
 const router: Router = express.Router();
 
 
@@ -182,8 +181,6 @@ router.get('/user/:user_id', async (req: Request, res: Response) => {
 
 router.delete('/', checkJwt, async (req: Request, res: Response) => {
   try {
-    // @todo - remove users posts
-    
     // Remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
     // Remove user
@@ -230,14 +227,14 @@ router.put('/experience',[
   } = req.body;
 
   interface IExp {
-    title: string,
-    company: string,
-    location: string,
-    from: string,
-    to: string,
-    current: string,
-    description: string
-  }
+    title: string;
+    company: string;
+    location?: string;
+    from: string;
+    to?: string;
+    current?: boolean;
+    description?: string;
+  };
 
   const newExp: IExp = {
     title,
@@ -247,7 +244,7 @@ router.put('/experience',[
     to,
     current,
     description
-  }
+  };
 
   try {
     const profile = await Profile.findOne({ user: req.user.id });
@@ -270,12 +267,13 @@ router.put('/experience',[
   }
 });
 
-
 // @route DELETE api/profile/experience/:exp_id
 // @desc Delete profile experience
 // @access Private
 
-router.delete('/experience/:exp_id', checkJwt, async (req: Request, res: Response) => {
+router.delete('/experience/:exp_id',
+  checkJwt,
+  async (req: Request, res: Response) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
@@ -297,6 +295,77 @@ router.delete('/experience/:exp_id', checkJwt, async (req: Request, res: Respons
     res.status(500).send('Server error');
   }
 });
+
+// @route PUT api/profile/education
+// @desc Add profile education
+// @access Private
+
+router.put('/education', [ checkJwt, [
+      check('school', 'School is required')
+        .not()
+        .isEmpty(),
+      check('degree', 'Degree is required')
+        .not()
+        .isEmpty(),
+      check('from', 'From is required')
+        .not()
+        .isEmpty(),
+    ] 
+  ], async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
+
+    interface IEdu {
+      school: string;
+      degree: string;
+      fieldofstudy?: string;
+      from: Date;
+      to?: Date;
+      current?: boolean;
+      description?: string;
+    };
+
+    const newEdu: IEdu = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      if (!profile) {
+        return res.status(400).json({ msg: 'Education is not found' });
+      }
+
+      profile.education.unshift(newEdu);
+
+      await profile.save();
+
+      res.json(profile);
+    } catch(err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  }
+);
 
 const profile: Router = router;
 

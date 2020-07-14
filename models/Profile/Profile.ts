@@ -15,17 +15,17 @@ interface IProfile extends Document {
     location?: string;
     from: string;
     to?: string;
-    current: string;
-    description: string;
+    current?: boolean;
+    description?: string;
   }[];
   education: {
     school: string;
     degree: string;
-    fieldofstudy: string;
+    fieldofstudy?: string;
     from: Date;
     to?: Date;
     current?: boolean;
-    description: string;
+    description?: string;
   }[];
   social: {
     youtube?: string;
