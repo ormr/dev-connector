@@ -115,7 +115,6 @@ router.post('/',
     
     try {
       let profile = await Profile.findOne({ user: req.user.id });
-      console.log(profile);
 
       if (profile) {
         // Update
@@ -268,6 +267,34 @@ router.put('/experience',[
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+
+// @route DELETE api/profile/experience/:exp_id
+// @desc Delete profile experience
+// @access Private
+
+router.delete('/experience/:exp_id', checkJwt, async (req: Request, res: Response) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    if (!profile) {
+      console.log(profile);
+      return res.status(400).json({ msg: 'There is no such experience' });
+    }
+
+    // Get remove index
+    const removeIndex = profile.experience.map((item: any) => item.id).indexOf(req.params.exp_id);
+
+    profile.experience.splice(removeIndex, 1);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
   }
 });
 
