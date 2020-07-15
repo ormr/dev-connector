@@ -1,7 +1,7 @@
 import mongoose, { Model, model, Schema, Document } from 'mongoose';
 
 export interface IPost extends Document {
-  user?: string;
+  user: any;
   text: string;
   name: string;
   avatar?: string;
