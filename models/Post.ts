@@ -5,7 +5,7 @@ export interface IPost extends Document {
   text: string;
   name: string;
   avatar?: string;
-  likes?: {
+  likes: {
     user?: string;
   }[];
   comments?: {
