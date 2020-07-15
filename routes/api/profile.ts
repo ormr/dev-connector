@@ -1,4 +1,6 @@
 import express, { Router, Request, Response } from "express";
+import request from 'request';
+import config from 'config';
 import { check, validationResult } from 'express-validator';
 import { checkJwt } from '../../middleware/check-jwt';
 import { Profile } from '../../models/Profile/Profile';
@@ -268,7 +270,7 @@ router.put('/experience',[
 });
 
 // @route DELETE api/profile/experience/:exp_id
-// @desc Delete profile experience
+// @desc Delete experience from profile
 // @access Private
 
 router.delete('/experience/:exp_id',
@@ -305,6 +307,9 @@ router.put('/education', [ checkJwt, [
         .not()
         .isEmpty(),
       check('degree', 'Degree is required')
+        .not()
+        .isEmpty(),
+      check('fieldofstudy', 'Field of study is required')
         .not()
         .isEmpty(),
       check('from', 'From is required')
@@ -368,7 +373,7 @@ router.put('/education', [ checkJwt, [
 );
 
 // @route DELETE api/profile/education/:edu_id
-// @desc Delete profile education
+// @desc Delete education from profile
 // @access Private
 
 router.delete('/education/:edu_id',
@@ -397,6 +402,40 @@ router.delete('/education/:edu_id',
     }
   }
 );
+
+
+// @route GET api/profile/github/:username
+// @desc Get user repos from Github
+// @access Public
+
+router.get('/github/:username', (req: Request, res: Response) => {
+  try {
+    const options = {
+      uri: `https://api.github.com/users/${
+        req.params.username
+      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+        'githubClientId'
+        )}&client_secret=${config.get('githubSecret')}`,
+        method: 'GET',
+        headers: { 'user-agent': 'node.js' }
+    }
+
+    request(options, (error, response, body) => {
+      if (error) {
+        console.error(error);
+      }
+
+      if (response.statusCode !== 200) {
+        return res.status(404).json({ msg: 'No Github profile found' })
+      }
+
+      res.json(JSON.parse(body));
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+})
 
 const profile: Router = router;
 
