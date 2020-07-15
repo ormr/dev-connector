@@ -64,6 +64,26 @@ router.get('/', checkJwt, async (req: Request, res: Response) => {
   }
 });
 
+// @route Get api/post/:id
+// @desc Get post by id
+// @access Private
+
+router.get('/:id', checkJwt, async (req: Request, res: Response) => {
+  try {
+    console.log(req.params);
+    const post: IPost | null = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(400).json({ msg: 'Post is not found' });
+    }
+
+    res.json(post);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 const post: Router = router;
 
 export { post };
