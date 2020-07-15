@@ -155,6 +155,45 @@ router.put('/like/:id',
   }
 );
 
+// @route PUT api/post/unlike/:id
+// @desc Unlike a post
+// @access Private
+
+router.put('/unlike/:id',
+  checkJwt,
+  async (req: Request, res: Response) => {
+    try {
+      const post: IPost | null = await Post.findById(req.params.id);
+
+      if (!post) {
+        return res.status(400).json('Id not found');
+      }
+
+      // Check if the post has already been linked
+      if (post.likes.filter((like: any) => like.user.toString() === req.user.id).length === 0) {
+        return res.status(400).json('Post has not yet been liked')
+      }
+
+      const removeIndex: number = post.likes.map((like: any) => like.user.toString()).indexOf(req.params.id);
+
+      post.likes.splice(removeIndex, 1);
+
+      await post.save();
+
+      res.json(post.likes);
+    } catch (err) {
+      console.error(err.message);
+
+      if (err.kind === 'ObjectId') {
+        return res.status(404).json({ msg: 'Id not found' })
+      }
+
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+
 const post: Router = router;
 
 export { post };
