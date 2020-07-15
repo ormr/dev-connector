@@ -193,6 +193,57 @@ router.put('/unlike/:id',
   }
 );
 
+// @route  POST api/post/comment/:id
+// @desc   Comment on a post
+// @access Private
+
+router.post('/comment/:id',
+  [
+    checkJwt,
+    [
+      check('text', 'Text is required')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req: Request, res: Response) => {
+    const errors: Result<ValidationError> = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+
+    try {
+      const user: IUser | null = await User.findById(req.user.id).select('-password');
+      const post: IPost | null = await Post.findById(req.params.id);
+
+      if (!user || !post) {
+        return res.status(400).json({ msg: 'User is not found' });
+      }
+
+      const newComment = {
+        text: req.body.text,
+        name: user.name,
+        avatar: user.avatar,
+        user: req.user.id
+      };
+
+      post.comments.unshift(newComment);
+
+      await post.save();
+
+      res.json(post.comments);
+    } catch (err) {
+      console.error(err.message);
+
+      if (err.kind === 'ObjectId') {
+        return res.status(404).json({ msg: 'Post not found' })
+      }
+
+      res.status(500).send('Server Error');
+    }
+});
+
 
 const post: Router = router;
 
