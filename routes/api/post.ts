@@ -244,6 +244,58 @@ router.post('/comment/:id',
     }
 });
 
+// @route  DELETE api/post/comment/:id/:comment_id
+// @desc   Delete comment on post
+// @access Private
+
+router.delete('/comment/:id/:comment_id',
+  checkJwt,
+  async (req: Request, res: Response) => {
+    try {
+      const post: IPost | null = await Post.findById(req.params.id);
+
+      if (!post) {
+        return res
+          .status(404)
+          .json({ msg: 'Post not found' });
+      }
+
+      const comment = post.comments.find(
+        (comment: any) => comment.id === req.params.comment_id
+        );
+
+      if (!comment) {
+        return res
+          .status(404)
+          .json({ msg: 'Comment does not exist' });
+      }
+
+      // Check user
+      if (comment.user.toString() !== req.user.id) {
+        return res
+          .status(404)
+          .json({ msg: 'User not authorized' });
+      }
+
+      const removeIndex: number = post.comments
+        .map((comment: any) => comment.user.toString())
+        .indexOf(req.user.id);
+
+      post.comments.splice(removeIndex, 1);
+
+      await post.save();
+
+      res.json(post.comments);
+    } catch (err) {
+      console.error(err.message);
+
+      if (err.kind === 'ObjectId') {
+        return res.status(404).json({ msg: 'Post not found' })
+      }
+
+      res.status(500).send('Server Error');
+    }
+});
 
 const post: Router = router;
 

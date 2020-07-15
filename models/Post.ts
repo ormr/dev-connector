@@ -9,7 +9,7 @@ export interface IPost extends Document {
     user?: string;
   }[];
   comments: {
-    user?: string;
+    user: string;
     text: string;
     avatar?: string;
     date?: Date;
