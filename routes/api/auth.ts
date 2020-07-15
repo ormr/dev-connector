@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import { checkJwt } from '../../middleware/check-jwt';
-import { User } from '../../models/User/User'
+import { User } from '../../models/User'
 
 import gravatar from 'gravatar';
 

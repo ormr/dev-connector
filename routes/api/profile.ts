@@ -3,8 +3,8 @@ import request from 'request';
 import config from 'config';
 import { check, validationResult } from 'express-validator';
 import { checkJwt } from '../../middleware/check-jwt';
-import { Profile } from '../../models/Profile/Profile';
-import { User } from '../../models/User/User';
+import { Profile } from '../../models/Profile';
+import { User } from '../../models/User';
 const router: Router = express.Router();
 
 
