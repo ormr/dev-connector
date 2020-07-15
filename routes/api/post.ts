@@ -84,6 +84,22 @@ router.get('/:id', checkJwt, async (req: Request, res: Response) => {
   }
 });
 
+// @route DELETE api/post/:id
+// @desc Delete post by id
+// @access Private
+
+router.delete('/:id', checkJwt, async (req: Request, res: Response) => {
+  try {
+    // Remove by Id
+    await Post.findByIdAndRemove(req.params.id);
+
+    res.json({ msg: 'Post deleted' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 const post: Router = router;
 
 export { post };
