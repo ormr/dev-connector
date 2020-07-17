@@ -4,7 +4,7 @@
     "module": "commonjs",                     
     "outFile": "./dist",                       
     "outDir": "./src",
-    "typeRoots": ["./types"],                        
+    "typeRoots": ["./server/types"],                        
     "strict": true,                          
     "esModuleInterop": true,                  
     "skipLibCheck": true,                     
