@@ -23,6 +23,6 @@ app.use('/api/profile', profile);
 app.use('/api/post', post);
 app.use('/api/users', users);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server started on port http://localhost:${PORT}`)); 
