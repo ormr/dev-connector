@@ -27,8 +27,6 @@ const Register: React.FC = () => {
 
   const onSubmit = async (e: any) => {
 
-    const base: string = 'http://localhost:5000';
-
     e.preventDefault();
     if (password !== password2) {
       console.log('Passwords do not match');
