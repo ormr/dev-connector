@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
+import PropTypes from 'prop-types';
 
 interface IformData {
   name: string;
@@ -14,7 +15,7 @@ type Props = {
   setAlert: (msg: string, alertType: string) => void;
 }
 
-const RegisterView: React.FunctionComponent<Props> = ({ setAlert }) => {
+const RegisterView: React.FC<Props> = ({ setAlert }) => {
   const minLength: number = 6;
 
   const initialState: IformData = {
@@ -99,6 +100,10 @@ const RegisterView: React.FunctionComponent<Props> = ({ setAlert }) => {
       </p>
     </Fragment>
   );
+}
+
+RegisterView.propTypes = {
+  setAlert: PropTypes.func.isRequired
 }
 
 const Register = connect(null, { setAlert })(RegisterView);

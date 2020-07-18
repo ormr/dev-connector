@@ -6,10 +6,6 @@ export const setAlert = (msg: string, alertType: string) => (dispatch: Dispatch<
   const id = uuid.v4();
   dispatch({
     type: SET_ALERT,
-    payload: { 
-      msg,
-      alertType,
-      id 
-    }
+    payload: { msg, alertType, id }
   });
 }
