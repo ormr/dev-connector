@@ -1,5 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setAlert } from '../../actions/alert';
 
 interface IformData {
   name: string;
@@ -8,7 +10,11 @@ interface IformData {
   password2: string;
 }
 
-const Register: React.FC = () => {
+type Props = {
+  setAlert: (msg: string, alertType: string) => void;
+}
+
+const RegisterView: React.FunctionComponent<Props> = ({ setAlert }) => {
   const minLength: number = 6;
 
   const initialState: IformData = {
@@ -25,11 +31,11 @@ const Register: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const onSubmit = async (e: any) => {
-
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     if (password !== password2) {
-      console.log('Passwords do not match');
+      setAlert('Passwords do not match', 'danger');
     } else {
       console.log('SUCCESS'); 
     }
@@ -94,6 +100,8 @@ const Register: React.FC = () => {
     </Fragment>
   );
 }
+
+const Register = connect(null, { setAlert })(RegisterView);
 
 export {
   Register
