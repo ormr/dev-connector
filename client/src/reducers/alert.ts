@@ -1,17 +1,12 @@
-import { Reducer, AnyAction } from 'redux';
+import { Reducer } from 'redux';
 import { SET_ALERT, REMOVE_ALERT } from '../actions/constants';
-import { Message, AlertActionTypes } from '../actions/constants'
-
-interface IAction {
-  type: string;
-  payload?: AlertActionTypes
-}
+import { Message, AlertActionTypes } from '../actions/constants';
 
 const initialState: Message[] = [
 
 ];
 
-const alert: Reducer = (state = initialState, action: AnyAction) => {
+const alert: Reducer = (state = initialState, action: AlertActionTypes) => {
   const { type, payload } = action;
   
   switch (type) {
