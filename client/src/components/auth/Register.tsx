@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
 interface IformData {
@@ -13,9 +14,10 @@ interface IformData {
 
 type Props = {
   setAlert: (msg: string, alertType: string) => void;
+  register: (props: { name: string, email: string, password: string }) => void;
 }
 
-const RegisterView: React.FC<Props> = ({ setAlert }) => {
+const RegisterView: React.FC<Props> = ({ setAlert, register }) => {
   const minLength: number = 6;
 
   const initialState: IformData = {
@@ -38,7 +40,7 @@ const RegisterView: React.FC<Props> = ({ setAlert }) => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      console.log('SUCCESS'); 
+      register({ name, email, password });
     }
   }
 
@@ -56,7 +58,7 @@ const RegisterView: React.FC<Props> = ({ setAlert }) => {
             name="name"
             value={name}
             onChange={(e) => onChange(e)}
-            required
+            
           />
         </div>
         <div className="form-group">
@@ -66,7 +68,7 @@ const RegisterView: React.FC<Props> = ({ setAlert }) => {
             value={email}
             onChange={(e) => onChange(e)}
             name="email"
-            required
+            
           />
           <small className="form-text">
             This site uses Gravatar so if you want a profile image,
@@ -80,7 +82,7 @@ const RegisterView: React.FC<Props> = ({ setAlert }) => {
             name="password"
             value={password}
             onChange={(e) => onChange(e)}
-            minLength={minLength}
+            
           />
         </div>
         <div className="form-group">
@@ -90,7 +92,7 @@ const RegisterView: React.FC<Props> = ({ setAlert }) => {
             name="password2"
             value={password2}
             onChange={(e) => onChange(e)}
-            minLength={minLength}
+            
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
@@ -103,10 +105,11 @@ const RegisterView: React.FC<Props> = ({ setAlert }) => {
 }
 
 RegisterView.propTypes = {
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired
 }
 
-const Register = connect(null, { setAlert })(RegisterView);
+const Register = connect(null, { setAlert, register })(RegisterView);
 
 export {
   Register
