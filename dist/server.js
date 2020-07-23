@@ -21,3 +21,14 @@ app.use('/api/post', post_1.post);
 app.use('/api/users', users_1.users);
 var PORT = process.env.PORT || 5000;
 app.listen(PORT, function () { return console.log("Server started on http://localhost:" + PORT); });
+/*
+***
+"build": "tsc -p tsconfig.json",
+   "build:watch": "yarn build --watch",
+   "start": "node dist/server.js",
+   "start:watch":"nodemon dist/server.js --log",
+   "client": "yarn --cwd ./client/src start",
+   "server": "concurrently \"yarn build:watch\" \"yarn start:watch\"",
+   "dev": "concurrently \"yarn server\" \"yarn client\""
+***
+*/ 

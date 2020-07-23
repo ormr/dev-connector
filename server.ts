@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { connectDB } from './config/db';
 import { auth } from './routes/api/auth';
 import { profile } from './routes/api/profile';
@@ -10,6 +11,8 @@ const app = express();
 // Connect Database
 connectDB();
 
+
+app.use(cors());
 // Init Middleware
 app.use(express.json());
 
@@ -21,4 +24,16 @@ app.use('/api/users', users);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`)); 
+app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
+
+  /*
+***
+"build": "tsc -p tsconfig.json",
+     "build:watch": "yarn build --watch",
+     "start": "node dist/server.js",
+     "start:watch":"nodemon dist/server.js --log",
+     "client": "yarn --cwd ./client/src start",
+     "server": "concurrently \"yarn build:watch\" \"yarn start:watch\"",
+     "dev": "concurrently \"yarn server\" \"yarn client\""
+***
+*/

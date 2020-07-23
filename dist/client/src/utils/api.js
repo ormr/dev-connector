@@ -6,9 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.api = void 0;
 var axios_1 = __importDefault(require("axios"));
 var api = axios_1.default.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:5000/api',
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'http://localhost:3000'
     }
 });
 exports.api = api;

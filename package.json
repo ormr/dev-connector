@@ -3,26 +3,14 @@
   "version": "1.0.0",
   "description": "Social network for delevopers",
   "scripts": {
-     "build": "tsc -p tsconfig.json",
-     "build:watch": "yarn build --watch",
-     "start": "node dist/server.js",
-     "start:watch":"nodemon dist/server.js --log",
-     "client": "yarn --cwd ./client/src start",
-     "server": "concurrently \"yarn build:watch\" \"yarn start:watch\"",
-     "dev": "concurrently \"yarn server\" \"yarn client\""
+    "server:watch": "ts-node server.ts",
+    "client:watch": "cd client && yarn start",
+    "dev": "concurrently \"yarn server:watch\" \"yarn client:watch\""
   },
-  "keywords": [
-    "MERN-stack",
-    "MongoDB",
-    "ExpressJS",
-    "ReactJS",
-    "NodeJS"
-  ],
-  "author": "Serafim Gavrilov",
-  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "config": "^3.3.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-validator": "^6.6.0",
     "gravatar": "^1.8.0",
@@ -33,6 +21,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/config": "0.0.36",
+    "@types/cors": "^2.8.6",
     "@types/express": "^4.17.7",
     "@types/express-validator": "^3.0.0",
     "@types/gravatar": "^1.8.1",
@@ -46,5 +35,14 @@
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.6"
-  }
+  },
+  "author": "Serafim Gavrilov",
+  "license": "MIT",
+  "keywords": [
+    "MERN-stack",
+    "MongoDB",
+    "ExpressJS",
+    "ReactJS",
+    "NodeJS"
+  ]
 }
